@@ -1,0 +1,10 @@
+[package]
+name = "walker"
+version.workspace = true
+authors.workspace = true
+description.workspace = true
+edition.workspace = true
+
+[dependencies]
+bevy.workspace = true
+bevy_turborand.workspace = true
