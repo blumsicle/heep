@@ -13,10 +13,14 @@ struct WalkerShape(Mesh2dHandle);
 #[derive(Resource)]
 struct WalkerColor(Handle<ColorMaterial>);
 
+#[derive(Resource)]
+struct SpawnTimer(Timer);
+
 pub struct WalkerPlugin;
 
 impl Plugin for WalkerPlugin {
     fn build(&self, app: &mut App) {
+        app.insert_resource(SpawnTimer(Timer::from_seconds(0.05, TimerMode::Repeating)));
         app.add_systems(Startup, Self::setup);
         app.add_systems(Update, Self::update);
     }
@@ -24,7 +28,7 @@ impl Plugin for WalkerPlugin {
 
 impl WalkerPlugin {
     const COLOR: Color = Color::srgba(0.2, 0.2, 0.8, 0.6);
-    const RADIUS: f32 = 0.5;
+    const RADIUS: f32 = 1.5;
 
     fn setup(
         mut commands: Commands,
@@ -51,26 +55,30 @@ impl WalkerPlugin {
 
     fn update(
         mut commands: Commands,
+        time: Res<Time>,
+        mut timer: ResMut<SpawnTimer>,
         shape: Res<WalkerShape>,
         color: Res<WalkerColor>,
         query: Query<(Entity, &Transform), With<LastWalker>>,
     ) {
-        let (entity, transform) = query.single();
-        commands.entity(entity).remove::<LastWalker>();
+        if timer.0.tick(time.delta()).just_finished() {
+            let (entity, transform) = query.single();
+            commands.entity(entity).remove::<LastWalker>();
 
-        let mut rng = RngComponent::new();
-        let mut transform = transform.clone();
-        transform.translation.x += rng.i32(-1..=1) as f32 * Self::RADIUS * 2.;
-        transform.translation.y += rng.i32(-1..=1) as f32 * Self::RADIUS * 2.;
+            let mut rng = RngComponent::new();
+            let mut transform = transform.clone();
+            transform.translation.x += rng.i32(-1..=1) as f32 * Self::RADIUS * 2.;
+            transform.translation.y += rng.i32(-1..=1) as f32 * Self::RADIUS * 2.;
 
-        commands.spawn((
-            MaterialMesh2dBundle {
-                mesh: shape.0.clone(),
-                material: color.0.clone(),
-                transform,
-                ..Default::default()
-            },
-            LastWalker,
-        ));
+            commands.spawn((
+                MaterialMesh2dBundle {
+                    mesh: shape.0.clone(),
+                    material: color.0.clone(),
+                    transform,
+                    ..Default::default()
+                },
+                LastWalker,
+            ));
+        }
     }
 }

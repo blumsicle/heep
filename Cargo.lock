@@ -1256,6 +1256,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "bounce"
+version = "0.1.0"
+dependencies = [
+ "bevy",
+ "bevy_turborand",
+ "heep",
+]
+
+[[package]]
 name = "bumpalo"
 version = "3.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2089,6 +2098,13 @@ dependencies = [
  "thiserror",
  "widestring",
  "winapi",
+]
+
+[[package]]
+name = "heep"
+version = "0.1.0"
+dependencies = [
+ "bevy",
 ]
 
 [[package]]
@@ -3014,6 +3030,13 @@ dependencies = [
  "rustix",
  "tracing",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "pong"
+version = "0.1.0"
+dependencies = [
+ "bevy",
 ]
 
 [[package]]

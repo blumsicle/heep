@@ -1,6 +1,12 @@
 [workspace]
 resolver = "2"
-members = [ "first" , "walker"]
+members = [
+  "heep",
+  "first",
+  "pong",
+  "walker",
+  "bounce", "heep",
+]
 
 [workspace.package]
 version = "0.1.0"
@@ -11,6 +17,7 @@ edition = "2021"
 [workspace.dependencies]
 bevy = { version = "0.14.1", features = ["dynamic_linking", "bevy_dev_tools"] }
 bevy_turborand = "0.9.0"
+heep = { path = "./heep" }
 
 [profile.dev]
 opt-level = 1
